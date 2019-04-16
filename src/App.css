@@ -1,4 +1,18 @@
 .App {
-  padding: 30px;
-  text-align: center;
+  padding: 80px;
+}
+
+.flex {
+  display: flex;
+}
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+
+body {
+  background-color: #f1f2f3;
 }
