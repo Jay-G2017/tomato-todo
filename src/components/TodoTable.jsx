@@ -7,7 +7,15 @@ class TodoTable extends Component {
     return (
       <div className="todo-table">
         {this.props.todos.map(todo => {
-          return <TodoRow todo={todo} key={todo.id} />;
+          return (
+            <TodoRow
+              todo={todo}
+              key={todo.id}
+              handleTodoDeleteClick={todoId =>
+                this.props.handleTodoDeleteClick(todoId)
+              }
+            />
+          );
         })}
       </div>
     );

@@ -3,9 +3,8 @@ import "./TodoRow.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class TodoRow extends Component {
-  state = {};
-
-  renderTodoCheckbox(todoId) {
+  renderTodoCheckbox() {
+    let todoId = this.props.todo.id;
     return (
       <div className="todo-checkbox">
         <input type="checkbox" id={"checkbox" + todoId} />
@@ -14,8 +13,8 @@ class TodoRow extends Component {
     );
   }
 
-  renderTodoContent(todoName) {
-    return <div className="todo-content">{todoName}</div>;
+  renderTodoContent() {
+    return <div className="todo-content">{this.props.todo.name}</div>;
   }
 
   renderTodoTomatoPlay() {
@@ -28,7 +27,10 @@ class TodoRow extends Component {
 
   renderTodoDelete() {
     return (
-      <div className="todo-delete text-danger">
+      <div
+        className="todo-delete text-danger "
+        onClick={() => this.props.handleTodoDeleteClick(this.props.todo.id)}
+      >
         <FontAwesomeIcon icon="minus-circle" />
       </div>
     );
@@ -36,8 +38,8 @@ class TodoRow extends Component {
   render() {
     return (
       <div className="todo-row flex-between align-center">
-        {this.renderTodoCheckbox(this.props.todo.id)}
-        {this.renderTodoContent(this.props.todo.name)}
+        {this.renderTodoCheckbox()}
+        {this.renderTodoContent()}
         {this.renderTodoTomatoPlay()}
         {this.renderTodoDelete()}
       </div>

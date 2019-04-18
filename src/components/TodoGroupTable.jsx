@@ -22,12 +22,22 @@ class TodoGroupTable extends Component {
 
       const todos = this.state.todos.slice();
       const newTodo = { name: e.target.value };
-      newTodo.id = todos[todos.length - 1].id + 1;
+      let lastId = 0;
+      if (todos.length) lastId = todos[todos.length - 1].id;
+      newTodo.id = lastId + 1;
       todos.push(newTodo);
 
       this.setState({ todos: todos });
       e.target.value = null;
     }
+  }
+
+  handleTodoDeleteClick(todoId) {
+    const todos = this.state.todos.slice();
+    todos.forEach((todo, index) => {
+      if (todo.id === todoId) todos.splice(index, 1);
+    });
+    this.setState({ todos: todos });
   }
 
   render() {
@@ -41,7 +51,10 @@ class TodoGroupTable extends Component {
         <AddTodoBar
           handleAddTodoInputKeyDown={e => this.handleAddTodoInputKeyDown(e)}
         />
-        <TodoTable todos={todoGroup.todos} />
+        <TodoTable
+          todos={todoGroup.todos}
+          handleTodoDeleteClick={e => this.handleTodoDeleteClick(e)}
+        />
       </div>
     );
   }
