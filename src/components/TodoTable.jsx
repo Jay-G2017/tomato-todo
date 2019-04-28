@@ -1,25 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
 import TodoRow from "./TodoRow";
 
-class TodoTable extends Component {
-  state = {};
-  render() {
-    return (
-      <div className="todo-table">
-        {this.props.todos.map(todo => {
-          return (
-            <TodoRow
-              todo={todo}
-              key={todo.id}
-              handleTodoDeleteClick={todoId =>
-                this.props.handleTodoDeleteClick(todoId)
-              }
-            />
-          );
-        })}
-      </div>
-    );
-  }
-}
+export default function TodoTable(props) {
+  const todos = props.todos;
 
-export default TodoTable;
+  return (
+    <div className="todo-table">
+      {todos.map(todo => {
+        return (
+          <TodoRow
+            todo={todo}
+            key={todo.id}
+            handleTodoDeleteClick={todoId =>
+              props.handleTodoDeleteClick(todoId)
+            }
+          />
+        );
+      })}
+    </div>
+  );
+}
