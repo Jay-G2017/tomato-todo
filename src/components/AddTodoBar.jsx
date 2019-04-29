@@ -8,7 +8,7 @@ export default function AddTodoBar(props) {
         <input
           type="text"
           placeholder="add a todo"
-          onKeyDown={e => props.handleAddTodoInputKeyDown(e)}
+          onKeyDown={e => props.handleAddTodoInputKeyDown(props.titleId, e)}
         />
       </form>
     </div>

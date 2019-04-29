@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import TitleRow from "./TitleRow";
 import AddTodoBar from "./AddTodoBar";
 import TodoTable from "./TodoTable";
+import "./TitleBoard.scss";
 
-export default function TitleBoard() {
+export default function TitleBoard(props) {
+  /*
   const [title, setTitle] = useState({ name: "完成一个todo组" });
   const [todos, setTodos] = useState([
     { id: 1, name: "可以添加todo" },
@@ -34,16 +36,20 @@ export default function TitleBoard() {
       e.target.value = null;
     }
   };
+  */
 
   return (
-    <div className="todo-group-table">
-      <TitleRow name={title.name} />
+    <div className="title-board">
+      <TitleRow name={props.title.name} />
       <AddTodoBar
-        handleAddTodoInputKeyDown={e => handleAddTodoInputKeyDown(e)}
+        titleId={props.title.id}
+        handleAddTodoInputKeyDown={(titleId, e) =>
+          props.handleAddTodoInputKeyDown(titleId, e)
+        }
       />
       <TodoTable
-        todos={todos}
-        handleTodoDeleteClick={todoId => handleTodoDeleteClick(todoId)}
+        todos={props.title.todos}
+        handleTodoDeleteClick={todoId => props.handleTodoDeleteClick(todoId)}
       />
     </div>
   );
