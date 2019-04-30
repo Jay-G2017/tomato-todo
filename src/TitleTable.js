@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.css";
 import TitleBoard from "./components/TitleBoard";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
-import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
-
-library.add(faPlayCircle);
-library.add(faMinusCircle);
 
 export default function TitleTable(props) {
   const [titles, setTitles] = useState([]);
@@ -39,7 +29,7 @@ export default function TitleTable(props) {
     const newTitles = titles.slice();
     newTitles.forEach(title => {
       title.todos.forEach((todo, index) => {
-        if (todo.id == todoId) title.todos.splice(index, 1);
+        if (todo.id === todoId) title.todos.splice(index, 1);
       });
     });
     deleteTodoRequest(todoId);
@@ -47,7 +37,6 @@ export default function TitleTable(props) {
   };
 
   const addTodoRequest = (titleId, todoName) => {
-    let xhr = new XMLHttpRequest();
     const url = `http://localhost:3002/api/v1/titles/${titleId}/todos?name=${todoName}`;
     fetch(url, { method: "post" })
       .then(response => response.json())
@@ -56,20 +45,17 @@ export default function TitleTable(props) {
   };
 
   const handleAddTodoInputKeyDown = (titleId, event) => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
+    event.preventDefault();
 
-      const newTitles = titles.slice();
-      const todoName = event.target.value;
-      const newTodo = { id: -1, name: todoName };
-      newTitles.forEach(title => {
-        if (title.id == titleId) title.todos.push(newTodo);
-      });
+    const newTitles = titles.slice();
+    const todoName = event.target.value;
+    const newTodo = { id: -1, name: todoName };
+    newTitles.forEach(title => {
+      if (title.id === titleId) title.todos.push(newTodo);
+    });
 
-      addTodoRequest(titleId, todoName);
-      setTitles(newTitles);
-      event.target.value = null;
-    }
+    addTodoRequest(titleId, todoName);
+    setTitles(newTitles);
   };
 
   return (
