@@ -14,33 +14,25 @@ library.add(faMinusCircle);
 export default function TitleTable(props) {
   const [titles, setTitles] = useState([]);
   useEffect(() => {
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:3002/api/v1/projects/9");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const result = JSON.parse(xhr.responseText);
-        setTitles(result.titles);
-      } else {
-      }
-    };
+    const url = "http://localhost:3002/api/v1/projects/9";
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setTitles(data.titles);
+      })
+      .catch(error => {
+        alert("error", error);
+      });
   }, [5]);
 
   const deleteTodoRequest = todoId => {
-    let xhr = new XMLHttpRequest();
     const url = `http://localhost:3002/api/v1/todos/${todoId}`;
-    xhr.open("DELETE", url);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const result = JSON.parse(xhr.responseText);
-        console.log(result);
-        setTitles(result.titles);
-      } else {
-      }
-    };
+    fetch(url, { method: "delete" })
+      .then(response => response.json)
+      .then()
+      .catch(error => alert("delete error", error));
   };
 
   const handleTodoDeleteClick = todoId => {
@@ -57,17 +49,10 @@ export default function TitleTable(props) {
   const addTodoRequest = (titleId, todoName) => {
     let xhr = new XMLHttpRequest();
     const url = `http://localhost:3002/api/v1/titles/${titleId}/todos?name=${todoName}`;
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        const result = JSON.parse(xhr.responseText);
-        console.log("add todo success", result);
-        setTitles(result.titles);
-      } else {
-      }
-    };
+    fetch(url, { method: "post" })
+      .then(response => response.json())
+      .then(data => setTitles(data.titles))
+      .catch(error => alert("add error", error));
   };
 
   const handleAddTodoInputKeyDown = (titleId, event) => {
