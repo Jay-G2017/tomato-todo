@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Route } from "react-router-dom";
 import TitleBoard from "./components/TitleBoard";
 
 export default function TitleTable(props) {
   const [titles, setTitles] = useState([]);
+  const projectId = props.match.params.projectId;
   useEffect(() => {
-    const url = "http://localhost:3002/api/v1/projects/9";
+    const url = "http://localhost:3002/api/v1/projects/" + projectId;
     fetch(url)
       .then(response => {
         return response.json();
@@ -15,7 +17,7 @@ export default function TitleTable(props) {
       .catch(error => {
         alert("error", error);
       });
-  }, [5]);
+  }, [projectId]);
 
   const deleteTodoRequest = todoId => {
     const url = `http://localhost:3002/api/v1/todos/${todoId}`;
