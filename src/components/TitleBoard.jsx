@@ -10,8 +10,8 @@ export default function TitleBoard(props) {
       <TitleRow name={props.title.name} />
       <AddTodoBar
         titleId={props.title.id}
-        handleAddTodoInputKeyDown={(titleId, e) =>
-          props.handleAddTodoInputKeyDown(titleId, e)
+        handleAddTodoInputKeyDown={(titleId, todoName) =>
+          props.handleAddTodoInputKeyDown(titleId, todoName)
         }
       />
       <TodoTable

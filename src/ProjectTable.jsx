@@ -21,15 +21,17 @@ function ProjectTable(props) {
   }, [1]);
 
   return (
-    <Menu>
-      {projects.map(project => {
-        return (
-          <Menu.Item key={project.id.toString()}>
-            <Link to={`/projects/${project.id}`}>{project.name}</Link>
-          </Menu.Item>
-        );
-      })}
-    </Menu>
+    <div style={{ padding: "20px 0" }}>
+      <Menu>
+        {projects.map(project => {
+          return (
+            <Menu.Item key={project.id.toString()}>
+              <Link to={`/projects/${project.id}`}>{project.name}</Link>
+            </Menu.Item>
+          );
+        })}
+      </Menu>
+    </div>
   );
 }
 
