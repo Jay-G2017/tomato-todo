@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from "react";
+import { message } from "antd";
 
 function useProject(projectId) {
   const [project, setProject] = useState({});
 
   useEffect(() => {
-    console.log("hi from use project");
-    const url = "http://localhost:3002/api/v1/projects/" + projectId;
-    fetch(url)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        setProject(data);
-      })
-      .catch(error => {
-        alert("error", error);
-      });
+    if (projectId) {
+      const url = window.tomatoApi.baseUrl + "/api/v1/projects/" + projectId;
+      fetch(url)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          setProject(data);
+        })
+        .catch(error => {
+          message.error(error);
+        });
+    }
   }, [projectId]);
 
   const addTodoRequest = (titleId, todoName) => {
-    const url = `http://localhost:3002/api/v1/titles/${titleId}/todos?name=${todoName}`;
+    const url = `${
+      window.tomatoApi.baseUrl
+    }/api/v1/titles/${titleId}/todos?name=${todoName}`;
     fetch(url, { method: "post" })
       .then(response => response.json())
-      .then()
+      .then(res => message.info("创建成功"))
       .catch(error => alert("add error", error));
   };
 
@@ -38,7 +42,7 @@ function useProject(projectId) {
   };
 
   const deleteTodoRequest = todoId => {
-    const url = `http://localhost:3002/api/v1/todos/${todoId}`;
+    const url = `${window.tomatoApi.baseUrl}/api/v1/todos/${todoId}`;
     fetch(url, { method: "delete" })
       .then(response => response.json)
       .then()
