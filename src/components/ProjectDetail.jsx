@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Menu, Input, Button } from "antd";
+import { Menu, Input, Button, message } from "antd";
+import { cloneDeep } from "lodash";
 import styled from "styled-components";
 import TitleBoard from "./TitleBoard";
-import useProject from "../hooks/useProject";
-import useProjectList from "../hooks/useProjectList";
 import TodoRow from "./TodoRow";
 
 const Container = styled.div`
@@ -67,14 +66,11 @@ const ProjectFooter = styled.div`
 `;
 
 function ProjectDetail(props) {
-  const {
-    projects,
-    projectId,
-    setProjectId,
-    fetchProjectList
-  } = useProjectList();
+  const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useState(null);
 
-  const { project, fetchProject, handleAddTodo } = useProject();
+  const [project, setProject] = useState({});
+
   const [inputValue, setInputValue] = useState(null);
   const addTodoInput = useRef(null);
 
@@ -87,6 +83,77 @@ function ProjectDetail(props) {
   useEffect(() => {
     if (projectId) fetchProject(projectId);
   }, [projectId]);
+
+  const fetchProjectList = () => {
+    const url = window.tomatoApi.baseUrl + "/api/v1/categories/1/projects";
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setProjects(data);
+        if (!projectId && data[0]) setProjectId(data[0].id.toString());
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+
+  const fetchProject = projectId => {
+    const url = window.tomatoApi.baseUrl + "/api/v2/projects/" + projectId;
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setProject(data);
+      })
+      .catch(error => {
+        message.error(error);
+      });
+  };
+
+  const postToAddTodo = (todoName, titleId, projectId) => {
+    const url = `${
+      window.tomatoApi.baseUrl
+    }/api/v1/projects/${projectId}/todos?name=${todoName}&title_id=${titleId}`;
+    fetch(url, { method: "post" })
+      .then(response => response.json())
+      .then(res => {
+        message.success("创建成功");
+        fetchProject(projectId);
+      })
+      .catch(error => alert("add error", error));
+  };
+
+  const handleAddTodo = (todoName, titleId, projectId) => {
+    let _project = cloneDeep(project);
+    const newTodo = { id: -1, name: todoName };
+    if (titleId) {
+      _project.titles.forEach(title => {
+        if (title.id === titleId) title.todos.push(newTodo);
+      });
+    } else {
+      _project.todos.push(newTodo);
+    }
+    setProject(_project);
+
+    postToAddTodo(todoName, titleId, projectId);
+  };
+
+  const postTodeleteTodo = todoId => {
+    const url = `${window.tomatoApi.baseUrl}/api/v1/todos/${todoId}`;
+    fetch(url, { method: "delete" })
+      .then(response => response.json)
+      .then(() => message.success("删除成功"))
+      .catch(error => alert("delete error", error));
+  };
+
+  const handleDeleteTodo = todoId => {
+    setProject(deleteTodoFromProject(project, todoId));
+
+    postTodeleteTodo(todoId);
+  };
 
   return (
     <Container>
@@ -111,11 +178,23 @@ function ProjectDetail(props) {
         <ProjectBody>
           <NoneGroupTodoContainer>
             {project.todos &&
-              project.todos.map(todo => <TodoRow key={todo.id} todo={todo} />)}
+              project.todos.map(todo => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  handleDeleteTodo={handleDeleteTodo}
+                />
+              ))}
           </NoneGroupTodoContainer>
           {project.titles &&
             project.titles.map(title => (
-              <TitleBoard key={title.id} title={title} projectId={projectId} />
+              <TitleBoard
+                key={title.id}
+                title={title}
+                projectId={projectId}
+                handleDeleteTodo={handleDeleteTodo}
+                handleAddTodo={handleAddTodo}
+              />
             ))}
         </ProjectBody>
         <ProjectFooter>
@@ -143,6 +222,21 @@ function ProjectDetail(props) {
       </ProjectContainer>
     </Container>
   );
+}
+
+function deleteTodoFromProject(project, todoId) {
+  let _project = cloneDeep(project);
+  _project.todos.forEach((todo, index) => {
+    if (todo.id === todoId) _project.todos.splice(index, 1);
+  });
+
+  _project.titles.forEach(title => {
+    title.todos.forEach((todo, index) => {
+      if (todo.id === todoId) title.todos.splice(index, 1);
+    });
+  });
+
+  return _project;
 }
 
 export default ProjectDetail;

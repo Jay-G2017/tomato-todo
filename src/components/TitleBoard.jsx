@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import TodoRow from "./TodoRow";
 import Styled from "styled-components";
 import { Input } from "antd";
-import useProject from "../hooks/useProject";
 
 const TitleBoardContainer = Styled.div`
   margin-bottom: 40px;
@@ -17,9 +16,8 @@ const AddTodoBar = Styled.div`
 `;
 
 export default function TitleBoard(props) {
-  const { title, projectId } = props;
+  const { title, projectId, handleDeleteTodo, handleAddTodo } = props;
   const [inputValue, setInputValue] = useState(null);
-  const { handleAddTodo } = useProject();
   return (
     <TitleBoardContainer>
       <TitleRow>{title.name}</TitleRow>
@@ -37,7 +35,11 @@ export default function TitleBoard(props) {
         />
       </AddTodoBar>
       {title.todos.map(todo => (
-        <TodoRow todo={todo} key={todo.id} />
+        <TodoRow
+          todo={todo}
+          key={todo.id}
+          handleDeleteTodo={handleDeleteTodo}
+        />
       ))}
     </TitleBoardContainer>
   );

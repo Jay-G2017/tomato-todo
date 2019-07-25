@@ -4,7 +4,6 @@ import styled from "styled-components";
 import ProjectDetail from "./components/ProjectDetail";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { ProjectContextProvider } from "./contexts/ProjectContext";
 
 const Header = styled.div`
   height: 50px;
@@ -24,10 +23,8 @@ function App() {
     <Router>
       <Header>TimeNote</Header>
       <Body>
-        <ProjectContextProvider>
-          <Route path="/" exact component={ProjectDetail} />
-          <Route path="/projects/:projectId" component={ProjectDetail} />
-        </ProjectContextProvider>
+        <Route path="/" exact component={ProjectDetail} />
+        <Route path="/projects/:projectId" component={ProjectDetail} />
       </Body>
     </Router>
   );

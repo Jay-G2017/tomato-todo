@@ -5,14 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
-import useProject from "../hooks/useProject";
 
 library.add(faPlayCircle);
 library.add(faMinusCircle);
 
 export default function TodoRow(props) {
-  const todo = props.todo;
-  const { handleDeleteTodo } = useProject();
+  const { todo, handleDeleteTodo } = props;
 
   const renderTodoDelete = () => {
     return (
@@ -33,7 +31,7 @@ export default function TodoRow(props) {
       </div>
       <div className="todo-content">{todo.name}</div>
       {/* {renderTodoTomatoPlay(props)} */}
-      {renderTodoDelete(props)}
+      {renderTodoDelete()}
     </div>
   );
 }
