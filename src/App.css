@@ -1,7 +1,3 @@
-.App {
-  padding: 80px;
-}
-
 .flex {
   display: flex;
 }
@@ -15,4 +11,8 @@
 
 body {
   background-color: #f3f3f3 !important;
+}
+
+* {
+  box-sizing: border-box;
 }
