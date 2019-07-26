@@ -30,16 +30,7 @@ export default function TodoRow(props) {
         <label htmlFor={"checkbox" + todo.id} />
       </div>
       <div className="todo-content">{todo.name}</div>
-      {/* {renderTodoTomatoPlay(props)} */}
       {renderTodoDelete()}
-    </div>
-  );
-}
-
-function renderTodoTomatoPlay() {
-  return (
-    <div className="todo-play text-secondary">
-      <FontAwesomeIcon icon="play-circle" />
     </div>
   );
 }
